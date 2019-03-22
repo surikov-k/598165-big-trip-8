@@ -1,6 +1,7 @@
 import renderFilter from "./render-filter";
 import * as mock from "./mock-data";
 import renderEvent from "./render-event";
+import {getRandomInt} from "./utils";
 
 const tripFilter = document.querySelector(`.trip-filter`);
 tripFilter.innerHTML = ``;
@@ -17,8 +18,8 @@ const renderRandomEvents = (amount) => {
   const tripDayItemsFragment = document.createDocumentFragment();
 
   for (let i = 1; i <= amount; i++) {
-    const randomEvent = Math.floor(Math.random() * mock.EVENTS.length);
-    tripDayItemsFragment.appendChild(renderEvent(mock.EVENTS[randomEvent]));
+    const randomEvent = mock.event();
+    tripDayItemsFragment.appendChild(renderEvent(randomEvent));
   }
   tripDayItems.appendChild(tripDayItemsFragment);
 };
@@ -28,7 +29,7 @@ renderRandomEvents(7);
 const tripFilterItems = document.querySelectorAll(`.trip-filter__item`);
 tripFilterItems.forEach((it) => {
   it.addEventListener(`click`, () => {
-    const randomAmount = Math.floor(Math.random() * (mock.EVENTS_AMOUNT.max - mock.EVENTS_AMOUNT.min + 1) + mock.EVENTS_AMOUNT.min);
+    const randomAmount = getRandomInt(mock.EVENTS_AMOUNT.min, mock.EVENTS_AMOUNT.max);
     renderRandomEvents(randomAmount);
   });
 });

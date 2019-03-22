@@ -36,7 +36,8 @@ const getDuration = (schedule) => {
   const startMinutes = parseInt(schedule.start.split(`:`)[1], 10);
   const endHours = parseInt(schedule.end.split(`:`)[0], 10);
   const endMinutes = parseInt(schedule.end.split(`:`)[1], 10);
-  const duration = (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
+  let duration = (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
+  duration = duration <= 0 ? duration + 25 * 60 : duration;
   let durationHours = Math.floor(duration / 60);
   let durationMinutes = duration - durationHours * 60;
   durationHours = durationHours < 10 ? `0` + durationHours : durationHours;
