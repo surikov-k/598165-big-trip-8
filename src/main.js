@@ -1,7 +1,8 @@
 import renderFilter from "./render-filter";
 import * as mock from "./mock-data";
-import renderEvent from "./render-event";
 import {getRandomInt} from "./utils";
+import Event from "./event";
+import EventEdit from "./event-edit";
 
 const tripFilter = document.querySelector(`.trip-filter`);
 tripFilter.innerHTML = ``;
@@ -19,7 +20,25 @@ const renderRandomEvents = (amount) => {
 
   for (let i = 1; i <= amount; i++) {
     const randomEvent = mock.event();
-    tripDayItemsFragment.appendChild(renderEvent(randomEvent));
+    const event = new Event(randomEvent);
+    const eventEdit = new EventEdit(randomEvent);
+    tripDayItemsFragment.appendChild(event.render());
+    event.onEdit = () => {
+      eventEdit.render();
+      tripDayItems.replaceChild(eventEdit.element, event.element);
+      event.unrender();
+    };
+
+    eventEdit.onSubmit = () => {
+      event.render();
+      tripDayItems.replaceChild(event.element, eventEdit.element);
+      eventEdit.unrender();
+    };
+    eventEdit.onReset = () => {
+      event.render();
+      tripDayItems.replaceChild(event.element, eventEdit.element);
+      eventEdit.unrender();
+    };
   }
   tripDayItems.appendChild(tripDayItemsFragment);
 };

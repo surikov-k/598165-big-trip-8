@@ -27,3 +27,9 @@ export const formatTime = (hours, minutes) => {
   minutes = minutes < 10 ? `0` + minutes : minutes;
   return `${hours}:${minutes}`;
 };
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
