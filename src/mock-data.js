@@ -7,44 +7,44 @@ export const EVENTS_AMOUNT = {
   max: 5
 };
 
-const points = {
-  taxi: {
+export const Points = {
+  TAXI: {
     icon: `🚕`,
     title: `Taxi to`
   },
-  bus: {
+  BUS: {
     icon: `🚌`,
     title: `Bus to`
   },
-  train: {
+  TRAIN: {
     icon: `🚂`,
     title: `Train to`
   },
-  ship: {
+  SHIP: {
     icon: `🛳`,
     title: `Ship to`
   },
-  transport: {
+  TRANSPORT: {
     icon: `🚊`,
     title: `Transportaion to`
   },
-  drive: {
+  DRIVE: {
     icon: `🚗`,
     title: `Drive to`
   },
-  flight: {
-    icon: `✈`,
+  FLIGHT: {
+    icon: `✈️`,
     title: `Flight to`
   },
-  checkIn: {
+  CHECKIN: {
     icon: `🏨`,
     title: `Check into a hotel in  `
   },
-  sightseeing: {
+  SIGHTSEEING: {
     icon: `🏛`,
     title: `Sightseeing in`
   },
-  restaurant: {
+  RESTAURANT: {
     icon: `🍴`,
     title: `Dinner at a restaurant in`
   }
@@ -59,14 +59,14 @@ const offers = [
 
 const descriptionString = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
-const cities = [
+export const cities = [
   `Amsterdam`,
   `Geneva`,
   `Chamonix`
 ];
 
 const getType = () => {
-  return getRandomFromArray(Object.keys(points));
+  return getRandomFromArray(Object.keys(Points));
 };
 
 const getOffers = () => {
@@ -92,13 +92,23 @@ const getRandomTime = () => {
   return formatTime(getRandomInt(0, 23), getRandomInt(0, 59));
 };
 
+const getImages = () => {
+  const MAX = 5;
+  const images = [];
+  for (let i = 0; i <= MAX - 1; i++) {
+    images.push(`http://picsum.photos/300/150?r=${Math.random()}`);
+  }
+  return images;
+
+};
+
 export const event = () => {
   const type = getType();
+  const destination = getRandomFromArray(cities);
   return {
+    destination,
     type,
-    icon: points[type][`icon`],
-    title: `${points[type][`title`]} ${getRandomFromArray(cities)}`,
-    img: `http://picsum.photos/300/150?r=${Math.random()}`,
+    img: getImages(),
     offers: getOffers(),
     description: getDiscription(descriptionString),
     date: ``,
@@ -106,7 +116,7 @@ export const event = () => {
       start: getRandomTime(),
       end: getRandomTime()
     },
-    price: getRandomInt(20, 50)
+    price: getRandomInt(10, 50)
   };
 };
 
