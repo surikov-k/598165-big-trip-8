@@ -1,8 +1,9 @@
-import {createElement} from "./utils";
 import {Points, cities} from "./mock-data";
+import {Component} from "./componenet";
 
-export default class {
+export default class extends Component {
   constructor(event) {
+    super();
     this._type = event.type;
     this._icon = event.icon;
     this._destination = event.destination;
@@ -17,7 +18,6 @@ export default class {
     };
     this._price = event.price;
 
-    this._element = null;
     this._onSubmit = null;
     this._onReset = null;
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
@@ -43,10 +43,6 @@ export default class {
 
   set onReset(fn) {
     this._onReset = fn;
-  }
-
-  get element() {
-    return this._element;
   }
 
   _getDestinations() {
@@ -177,16 +173,6 @@ export default class {
     return offersList;
   }
 
-  render() {
-    if (this._element) {
-      this._element = null;
-    }
-    this._element = createElement(this.template);
-    this.bind();
-
-    return this._element;
-  }
-
   bind() {
     this._element.querySelector(`.point__button--save`).addEventListener(`submit`, this._onSubmitButtonClick);
     this._element.querySelector(`form`).addEventListener(`reset`, this._onFormReset);
@@ -195,10 +181,5 @@ export default class {
   unbind() {
     this._element.querySelector(`.point__button--save`).removeEventListener(`submit`, this._onSubmitButtonClick);
     this._element.querySelector(`form`).removeEventListener(`reset`, this._onFormReset);
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
   }
 }
