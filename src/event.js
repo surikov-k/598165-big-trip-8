@@ -1,8 +1,9 @@
-import {createElement} from "./utils";
 import {Points} from "./mock-data";
+import {Component} from "./componenet";
 
-export default class {
+export default class extends Component {
   constructor(event) {
+    super();
     this._type = event.type;
     this._destination = event.destination;
     this._img = event.img;
@@ -15,9 +16,6 @@ export default class {
     };
     this._price = event.price;
 
-    this._element = null;
-    this._state = {
-    };
     this._onEdit = null;
     this._onEventClick = this._onEventClick.bind(this);
   }
@@ -26,10 +24,6 @@ export default class {
     if (typeof this._onEdit === `function`) {
       this._onEdit();
     }
-  }
-
-  get element() {
-    return this._element;
   }
 
   set onEdit(fn) {
@@ -78,27 +72,12 @@ export default class {
     return `${durationHours}H ${durationMinutes}M`;
   }
 
-  render() {
-    if (this._element) {
-      this._element = null;
-    }
-    this._element = createElement(this.template);
-    this.bind();
-
-    return this._element;
-  }
-
   bind() {
     this._element.addEventListener(`click`, this._onEventClick);
   }
 
   unbind() {
     this._element.removeEventListener(`click`, this._onEventClick);
-  }
-
-  unrender() {
-    this.unbind();
-    this._element = null;
   }
 
 }
