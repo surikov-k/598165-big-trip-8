@@ -1,4 +1,9 @@
-import {getRandomFromArray, getRandomInt, shuffle, formatTime} from "./utils";
+import {
+  getRandomFromArray,
+  getRandomInt,
+  shuffle
+} from "./utils";
+import moment from "moment";
 
 export const FILTERS = [`Everthing`, `Future`, `Past`];
 
@@ -8,43 +13,43 @@ export const EVENTS_AMOUNT = {
 };
 
 export const Points = {
-  TAXI: {
+  'TAXI': {
     icon: `🚕`,
     title: `Taxi to`
   },
-  BUS: {
+  'BUS': {
     icon: `🚌`,
     title: `Bus to`
   },
-  TRAIN: {
+  'TRAIN': {
     icon: `🚂`,
     title: `Train to`
   },
-  SHIP: {
+  'SHIP': {
     icon: `🛳`,
     title: `Ship to`
   },
-  TRANSPORT: {
+  'TRANSPORT': {
     icon: `🚊`,
     title: `Transportaion to`
   },
-  DRIVE: {
+  'DRIVE': {
     icon: `🚗`,
     title: `Drive to`
   },
-  FLIGHT: {
+  'FLIGHT': {
     icon: `✈️`,
     title: `Flight to`
   },
-  CHECKIN: {
+  'CHECK-IN': {
     icon: `🏨`,
     title: `Check into a hotel in  `
   },
-  SIGHTSEEING: {
+  'SIGHTSEEING': {
     icon: `🏛`,
     title: `Sightseeing in`
   },
-  RESTAURANT: {
+  'RESTAURANT': {
     icon: `🍴`,
     title: `Dinner at a restaurant in`
   }
@@ -70,14 +75,16 @@ const getType = () => {
 };
 
 const getOffers = () => {
-  const offersQty = getRandomInt(0, 2);
+  const offersLimit = getRandomInt(0, 2);
   const randomOffers = shuffle(offers);
-  const newOffers = [];
-  for (let i = 0; i <= offersQty; i++) {
-    const newOffer = {};
-    newOffer[`title`] = randomOffers[i];
-    newOffer[`price`] = getRandomInt(20, 200);
-    newOffers.push(newOffer);
+  const newOffers = {};
+  for (let i = 0; i <= offersLimit; i++) {
+    const offerKey = randomOffers[i].toLowerCase().split(` `).join(`-`);
+    newOffers[offerKey] = {};
+    newOffers[offerKey][`title`] = randomOffers[i];
+    newOffers[offerKey][`price`] = getRandomInt(20, 200);
+    newOffers[offerKey][`isSelected`] = false;
+
   }
   return newOffers;
 };
@@ -89,7 +96,9 @@ const getDiscription = (string) => {
 };
 
 const getRandomTime = () => {
-  return formatTime(getRandomInt(0, 23), getRandomInt(0, 59));
+  const date = new Date();
+  date.setHours(getRandomInt(0, 23), getRandomInt(0, 59));
+  return moment(date.getTime()).format(`HH: mm`);
 };
 
 const getImages = () => {
@@ -111,13 +120,14 @@ export const event = () => {
     img: getImages(),
     offers: getOffers(),
     description: getDiscription(descriptionString),
-    date: ``,
+    date: new Date(),
     schedule: {
       start: getRandomTime(),
       end: getRandomTime()
     },
-    price: getRandomInt(10, 50)
+    price: getRandomInt(10, 50),
+    state: {
+      isFavorite: false
+    }
   };
 };
-
-

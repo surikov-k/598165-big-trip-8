@@ -22,11 +22,6 @@ export const shuffle = (arrayOriginal) => {
   return array;
 };
 
-export const formatTime = (hours, minutes) => {
-  hours = hours < 10 ? `0` + hours : hours;
-  minutes = minutes < 10 ? `0` + minutes : minutes;
-  return `${hours}:${minutes}`;
-};
 
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
