@@ -1,5 +1,10 @@
-import {Points} from "./mock-data";
-import {Component} from "./componenet";
+import {
+  Points
+} from "./mock-data";
+import {
+  Component
+} from "./componenet";
+
 
 export default class extends Component {
   constructor(event) {
@@ -15,6 +20,8 @@ export default class extends Component {
       end: event.schedule.end
     };
     this._price = event.price;
+
+    this._state.isFavorite = false;
 
     this._onEdit = null;
     this._onEventClick = this._onEventClick.bind(this);
@@ -33,8 +40,8 @@ export default class extends Component {
   get template() {
     return `
       <article class="trip-point">
-        <i class="trip-icon">${Points[this._type].icon}</i>
-        <h3 class="trip-point__title">${Points[this._type].title} ${this._destination}</h3>
+        <i class="trip-icon">${Points[this._type.toUpperCase()].icon}</i>
+        <h3 class="trip-point__title">${Points[this._type.toUpperCase()].title} ${this._destination}</h3>
         <p class="trip-point__schedule">
           <span class="trip-point__timetable">${this._schedule.start}&nbsp;&mdash; ${this._schedule.end}</span>
           <span class="trip-point__duration">${this._getDuration()}</span>
@@ -48,12 +55,14 @@ export default class extends Component {
 
   _renderOffers() {
     let offersList = ``;
-    for (const offer of this._offers) {
-      offersList += `
-        <li>
-          <button class="trip-point__offer">${offer.title} +&euro;&nbsp;${offer.price}</button>
-        </li>
-      `;
+    for (const offer of Object.entries(this._offers)) {
+      if (offer[1].isSelected) {
+        offersList += `
+          <li>
+            <button class="trip-point__offer">${offer[1].title} +&euro;&nbsp;${offer[1].price}</button>
+          </li>
+        `;
+      }
     }
     return offersList;
   }
@@ -78,6 +87,15 @@ export default class extends Component {
 
   unbind() {
     this._element.removeEventListener(`click`, this._onEventClick);
+  }
+
+  update(data) {
+    this._type = data.type;
+    this._destination = data.destination;
+    this._price = data.price;
+    this._state.isFavorite = data.state.isFavorite;
+    this._schedule.start = data.schedule.start;
+    this._offers = data.offers;
   }
 
 }

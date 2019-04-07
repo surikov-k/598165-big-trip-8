@@ -1,6 +1,8 @@
 import renderFilter from "./render-filter";
 import * as mock from "./mock-data";
-import {getRandomInt} from "./utils";
+import {
+  getRandomInt
+} from "./utils";
 import Event from "./event";
 import EventEdit from "./event-edit";
 
@@ -19,25 +21,35 @@ const renderRandomEvents = (amount) => {
   const tripDayItemsFragment = document.createDocumentFragment();
 
   for (let i = 1; i <= amount; i++) {
-    const randomEvent = mock.event();
-    const event = new Event(randomEvent);
-    const eventEdit = new EventEdit(randomEvent);
-    tripDayItemsFragment.appendChild(event.render());
-    event.onEdit = () => {
-      eventEdit.render();
-      tripDayItems.replaceChild(eventEdit.element, event.element);
-      event.unrender();
+    const event = mock.event();
+    const eventComponent = new Event(event);
+    const eventEditComponent = new EventEdit(event);
+    tripDayItemsFragment.appendChild(eventComponent.render());
+    eventComponent.onEdit = () => {
+      eventEditComponent.render();
+      tripDayItems.replaceChild(eventEditComponent.element, eventComponent.element);
+      eventComponent.unrender();
     };
 
-    eventEdit.onSubmit = () => {
-      event.render();
-      tripDayItems.replaceChild(event.element, eventEdit.element);
-      eventEdit.unrender();
+    eventEditComponent.onSubmit = (newObject) => {
+
+      event.type = newObject.type;
+      event.destination = newObject.destination;
+      event.price = newObject.price;
+      event.state.isFavorite = newObject.state.isFavorite;
+      event.schedule.start = newObject.schedule.start;
+      event.offers = newObject.offers;
+
+      eventComponent.update(event);
+      eventComponent.render();
+      tripDayItems.replaceChild(eventComponent.element, eventEditComponent.element);
+      eventEditComponent.unrender();
     };
-    eventEdit.onReset = () => {
-      event.render();
-      tripDayItems.replaceChild(event.element, eventEdit.element);
-      eventEdit.unrender();
+
+    eventEditComponent.onReset = () => {
+      eventComponent.render();
+      tripDayItems.replaceChild(eventComponent.element, eventEditComponent.element);
+      eventEditComponent.unrender();
     };
   }
   tripDayItems.appendChild(tripDayItemsFragment);
@@ -48,7 +60,10 @@ renderRandomEvents(7);
 const tripFilterItems = document.querySelectorAll(`.trip-filter__item`);
 tripFilterItems.forEach((it) => {
   it.addEventListener(`click`, () => {
-    const randomAmount = getRandomInt(mock.EVENTS_AMOUNT.min, mock.EVENTS_AMOUNT.max);
+    const randomAmount = getRandomInt(
+        mock.EVENTS_AMOUNT.min,
+        mock.EVENTS_AMOUNT.max
+    );
     renderRandomEvents(randomAmount);
   });
 });
